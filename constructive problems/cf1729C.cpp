@@ -2,32 +2,40 @@
 #include <cstring>
 #include <algorithm>
 #include <string>
+#include <vector>
+#include <map>
+#include <cmath>
 using namespace std;
+
+typedef long long LL;
+#define forn(i, n) for(int i = 0; i < int(n); i ++)
 
 typedef pair<char, int > PCI;
 
-PCI pci[200010];
-bool cmp(PCI a, PCI b){
-    if(a.first != b.first) return a.first < b.first;
-}
-
 void solve(){
-    string a;
-    cin >> a;
-    int n = a.size();
-    for(int i = 0; i < n; i ++) {
-        pci[i] = {a[i], i};
+    string s;
+    cin >> s;
+    int n = s.size();
+    map<char, vector<int>> let_to_ind;
+    
+    forn(i, n){
+        let_to_ind[s[i]].push_back(i);
     }
-    char start = a[0], end = a[a.size() - 1];
-    sort(a.begin(), a.end());
-    int p, q;
-    for(p = 0; p < a.size(); p ++){
-        if(p == start) break;
+    int direction = (s[0] < s[n - 1]) ? 1 : -1;
+    vector<int> ans;
+    for(char c = s[0]; c != s[n - 1] + direction; c += direction){
+        for(auto now : let_to_ind[c]){
+            ans.push_back(now);
+        }
     }
-    for(q = a.size() - 1; q >= 0; q --){
-        if(q == end) break;
-    }
-    cout << 
+    int cost = 0;
+    for(int i = 1; i < ans.size(); i ++)
+        cost += abs(s[ans[i]] - s[ans[i - 1]]);
+    
+    cout << cost << " " << ans.size() << '\n';
+    for(auto now : ans)
+        cout << now + 1 << ' ';
+    cout << endl;
 }
 
 int main(){
